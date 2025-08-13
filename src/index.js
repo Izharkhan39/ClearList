@@ -3,23 +3,34 @@ import { Task } from "./task";
 import { Project } from "./project";
 
 const createListBtn = document.querySelector("#createListBtn");
+const createTaskBtn = document.querySelector("#addTask");
 const projectUnorderdList = document.querySelector("#taskList");
 let projectListArray = [];
 
 //New List Button event listener
-createListBtn.addEventListener("click", (e) => {
+createListBtn.addEventListener("click", () => {
   addProject(task1);
 });
+
+createTaskBtn.addEventListener('click', ()=>{
+  addTask(task1);
+})
 
 function addProject(task) {
   const userInput = prompt("Name of Project");
   const project = createProject(userInput);
   projectListArray.push(project);
-  project.addTaskToProjects(task);
+  // project.addTaskToProjects(task);
 
   saveProjects();
   displayProjectTitle(project);
   return project;
+}
+
+function addTask(task){
+  projectListArray[1].projects.push(task)
+  console.log(projectListArray[0].projects);
+  saveProjects();
 }
 
 function saveProjects() {
@@ -53,7 +64,7 @@ function displayProjectTitle(project) {
 loadProjects();
 
 const task1 = new createTask(
-  "Walking",
+  "Swimming",
   "Take a walk",
   new Date().toISOString().split("T")[0],
   "Take and evening walk in the park",
@@ -61,25 +72,24 @@ const task1 = new createTask(
 );
 
 console.table(
-  projectListArray[0].projects[0].title,
-  projectListArray[0].projects[0].dueDate
+  projectListArray[0].projects
 );
 
-// const task2 = new Tasks(
-//   "Study",
-//   "Study for exams",
-//   new Date().toISOString().split("T")[0],
-//   "Learn physics and chemistry",
-//   false
-// );
+const task2 = createTask(
+  "Study",
+  "Study for exams",
+  new Date().toISOString().split("T")[0],
+  "Learn physics and chemistry",
+  false
+);
 
-// const task3 = new Tasks(
-//   "Build a project",
-//   "A todo app",
-//   new Date().toISOString().split("T")[0],
-//   "Make the project organize",
-//   false
-// );
+const task3 = createTask(
+  "Build a project",
+  "A todo app",
+  new Date().toISOString().split("T")[0],
+  "Make the project organize",
+  false
+);
 
 // const todayProject = new Projects("My Day");
 

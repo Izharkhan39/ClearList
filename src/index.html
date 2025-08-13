@@ -3,9 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Webpack Template</title>
+    <title>ClearList - To Do</title>
   </head>
   <body>
-    <h1>Hello Webpack!</h1>
+    <div class="container">
+      <div class="sidebar">
+        <h2>To-do/Not-to-do</h2>
+        <button type="button" id="createListBtn">New list</button>
+        <nav id="todos">
+          <ul id="taskList"></ul>
+        </nav>
+      </div>
+      <div class="content">
+        <button id="addTask">Add Task</button>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,3 +1,75 @@
+function openEditSidebar(
+  task,
+  projectIndex,
+  taskIndex,
+  projectListArray,
+  rerenderCallback
+) {
+  const sidebar = document.querySelector("#task-edit-sidebar");
+  const form = document.querySelector("#edit-task-form");
+  const closeBtn = document.querySelector("#close-sidebar-btn");
+  const deleteBtn = document.querySelector("#delete-task-btn"); // Get the new button
+
+  if (!sidebar || !form || !closeBtn || !deleteBtn) return;
+
+  // Populate form with task data
+  form.elements["title"].value = task.title || "";
+  form.elements["desc"].value = task.desc || "";
+  form.elements["date"].value = task.dueDate || "";
+
+  // Show the sidebar
+  sidebar.classList.add("active");
+
+  // --- Define a single cleanup function ---
+  const cleanup = () => {
+    sidebar.classList.remove("active");
+    // Clean up all listeners to prevent duplicates on next open
+    form.removeEventListener("submit", formSubmitHandler);
+    closeBtn.removeEventListener("click", closeSidebarHandler);
+    deleteBtn.removeEventListener("click", deleteHandler);
+  };
+
+  // --- Define Handlers ---
+  const formSubmitHandler = (e) => {
+    e.preventDefault();
+
+    // Update the task object
+    projectListArray[projectIndex].projects[taskIndex].title =
+      form.elements["title"].value;
+    projectListArray[projectIndex].projects[taskIndex].desc =
+      form.elements["desc"].value;
+    projectListArray[projectIndex].projects[taskIndex].dueDate =
+      form.elements["date"].value;
+
+    localStorage.setItem("projects", JSON.stringify(projectListArray));
+    cleanup(); // Hide sidebar and remove listeners
+    if (typeof rerenderCallback === "function") rerenderCallback();
+  };
+
+  const closeSidebarHandler = () => {
+    cleanup();
+  };
+
+  const deleteHandler = () => {
+    // Add a confirmation dialog before deleting
+    if (confirm(`Are you sure you want to delete the task "${task.title}"?`)) {
+      // Remove the task from the array using splice
+      projectListArray[projectIndex].projects.splice(taskIndex, 1);
+
+      // Save the updated array to local storage
+      localStorage.setItem("projects", JSON.stringify(projectListArray));
+
+      cleanup(); // Hide sidebar and remove listeners
+      if (typeof rerenderCallback === "function") rerenderCallback();
+    }
+  };
+
+  // --- Attach Event Listeners ---
+  form.addEventListener("submit", formSubmitHandler);
+  closeBtn.addEventListener("click", closeSidebarHandler);
+  deleteBtn.addEventListener("click", deleteHandler);
+}
+
 function toggleSidebarProjects(projectListArray, projectList, event) {
   clearContent();
   const li = event.target.closest("li");
@@ -16,43 +88,6 @@ function toggleSidebarProjects(projectListArray, projectList, event) {
   loadProjectContent(projectListArray);
 }
 
-function loadProjectContent(projectListArray) {
-  const currentSelectedProject = document.querySelector("li.active");
-  const taskContainer = document.querySelector(".taskContainer");
-  const projectTitleDisplayElement = document.querySelector(".ProjectDetails");
-
-  if (!currentSelectedProject) return;
-  if (!Array.isArray(projectListArray)) return; // defensive check
-
-  const selectedProjectTitle = currentSelectedProject.textContent.trim();
-  taskContainer.innerHTML = "";
-  projectTitleDisplayElement.innerHTML = "";
-
-  for (let i = 0; i < projectListArray.length; i++) {
-    const proj = projectListArray[i];
-    if (!proj) continue; // skip null/undefined entries
-    if (selectedProjectTitle === proj.title) {
-      ProjectTitleDisplay(proj);
-      // loop tasks
-      for (let j = 0; j < (proj.projects || []).length; j++) {
-        const task = proj.projects[j];
-        if (!task) continue;
-        const taskCard = createTaskCard(
-          task.title,
-          task.desc,
-          task.dueDate,
-          task.checklist,
-          i,
-          j,
-          projectListArray,
-          () => loadProjectContent(projectListArray)
-        );
-        taskContainer.appendChild(taskCard);
-      }
-    }
-  }
-}
-
 function createTaskCard(
   title,
   desc,
@@ -65,10 +100,14 @@ function createTaskCard(
 ) {
   const taskCard = document.createElement("div");
   taskCard.classList.add("taskCard");
+  taskCard.style.cursor = "pointer"; // Add cursor pointer to the whole card
 
   const taskCheckBox = document.createElement("input");
   taskCheckBox.type = "checkbox";
   taskCheckBox.checked = checklist;
+
+  // Prevent card click when checkbox is clicked
+  taskCheckBox.addEventListener("click", (e) => e.stopPropagation());
 
   taskCheckBox.addEventListener("change", () => {
     projectListArray[projectIndex].projects[taskIndex].checklist =
@@ -115,7 +154,55 @@ function createTaskCard(
   taskCard.appendChild(taskCheckBox);
   taskCard.appendChild(taskDataContainer);
 
+  taskCard.addEventListener("click", () => {
+    const task = projectListArray[projectIndex].projects[taskIndex];
+    openEditSidebar(
+      task,
+      projectIndex,
+      taskIndex,
+      projectListArray,
+      rerenderCallback
+    );
+  });
+
   return taskCard;
+}
+
+function loadProjectContent(projectListArray) {
+  const currentSelectedProject = document.querySelector("li.active");
+  const taskContainer = document.querySelector(".taskContainer");
+  const projectTitleDisplayElement = document.querySelector(".ProjectDetails");
+
+  if (!currentSelectedProject) return;
+  if (!Array.isArray(projectListArray)) return; // defensive check
+
+  const selectedProjectTitle = currentSelectedProject.textContent.trim();
+  taskContainer.innerHTML = "";
+  projectTitleDisplayElement.innerHTML = "";
+
+  for (let i = 0; i < projectListArray.length; i++) {
+    const proj = projectListArray[i];
+    if (!proj) continue; // skip null/undefined entries
+    if (selectedProjectTitle === proj.title) {
+      ProjectTitleDisplay(proj);
+      // loop tasks
+      for (let j = 0; j < (proj.projects || []).length; j++) {
+        const task = proj.projects[j];
+        if (!task) continue;
+        const taskCard = createTaskCard(
+          task.title,
+          task.desc,
+          task.dueDate,
+          task.checklist,
+          i,
+          j,
+          projectListArray,
+          () => loadProjectContent(projectListArray)
+        );
+        taskContainer.appendChild(taskCard);
+      }
+    }
+  }
 }
 
 function ProjectTitleDisplay(Project) {
@@ -126,14 +213,12 @@ function ProjectTitleDisplay(Project) {
 
   projectTitleDisplayElement.appendChild(projectTitle);
 
-  if (Project.title === "My Day") {
-    const currentDate = document.createElement("div");
-    const today = new Date();
-    const options = { weekday: "long", day: "numeric", month: "long" };
-    currentDate.textContent = today.toLocaleDateString("en-GB", options);
-    currentDate.classList.add("currentDate");
-    projectTitleDisplayElement.appendChild(currentDate);
-  }
+  const currentDate = document.createElement("div");
+  const today = new Date();
+  const options = { weekday: "long", day: "numeric", month: "long" };
+  currentDate.textContent = today.toLocaleDateString("en-GB", options);
+  currentDate.classList.add("currentDate");
+  projectTitleDisplayElement.appendChild(currentDate);
 }
 
 function userInput(title, desc, dueDate) {

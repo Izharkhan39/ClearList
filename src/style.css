@@ -45,7 +45,10 @@ body {
 }
 .sidebar h2 {
   margin-bottom: 20px;
-  font-size: 22px;
+  font-size: 24px;
+  text-align: center;
+
+  letter-spacing: 2px;
 }
 .content {
   width: 100%;
@@ -132,7 +135,7 @@ wrapper::before {
   bottom: 20px;
   right: 50px;
   left: 50px;
-  padding: 15px 10px 15px 20px;
+  padding: 10px 20px;
   border-radius: 4px;
   z-index: 10;
 }
@@ -255,7 +258,7 @@ input[type="checkbox"] {
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
+
   background-color: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -371,7 +374,7 @@ li:hover .projectOption {
   right: 0;
   width: 350px;
   height: 100%;
-  background: #fdfdff;
+  background: var(--sidebar-bg);
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
   z-index: 1100;
   transform: translateX(100%);
@@ -421,10 +424,11 @@ li:hover .projectOption {
 #edit-task-form textarea {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 0.2px solid rgba(190, 185, 185, 0.381);
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 14px;
   font-family: "Roboto", sans-serif;
+  background-color: var(--sidebar-bg);
 }
 
 #edit-task-form textarea {
@@ -436,14 +440,31 @@ li:hover .projectOption {
   padding: 12px;
   border: none;
   border-radius: 4px;
-  background-color: #f96424;
-  color: white;
+  background-color: transparent;
+  color: black;
+  font-size: 14px;
+
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border: 0.2px solid rgba(190, 185, 185, 0.381);
+}
+
+#edit-task-form button:hover {
+  background-color: #e9ecef;
+}
+#delete-task-btn {
+  margin-top: 8px; /* Add some space above the delete button */
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: transparent; /* A standard red for delete actions */
+  color: black;
   font-size: 16px;
-  font-weight: bold;
+
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
-#edit-task-form button:hover {
-  background-color: #e05a20;
+#delete-task-btn:hover {
+  background-color: #e9ecef; /* A darker red on hover */
 }

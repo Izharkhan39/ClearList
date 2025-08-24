@@ -8,7 +8,7 @@
   <body>
     <div class="container">
       <div class="sidebar">
-        <h2>To-do/Not-to-do</h2>
+        <h2>ClearList</h2>
 
         <button type="button" id="createListBtn">
           <svg
@@ -77,8 +77,8 @@
               <span class="calendar-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
+                  width="22"
+                  height="22"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -104,6 +104,24 @@
           </form>
         </div>
       </div>
+    </div>
+
+    <div id="task-edit-sidebar" class="task-edit-sidebar">
+      <button id="close-sidebar-btn">&times;</button>
+      <h3>Edit Task</h3>
+      <form id="edit-task-form">
+        <label for="edit-task-title">Title</label>
+        <input type="text" id="edit-task-title" name="title" required />
+
+        <label for="edit-task-desc">Description</label>
+        <textarea id="edit-task-desc" name="desc"></textarea>
+
+        <label for="edit-task-date">Due Date</label>
+        <input type="date" id="edit-task-date" name="date" required />
+
+        <button type="submit">Save Changes</button>
+        <button type="button" id="delete-task-btn">Delete Task</button>
+      </form>
     </div>
   </body>
 </html>

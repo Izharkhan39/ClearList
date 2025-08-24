@@ -9,14 +9,106 @@
     <div class="container">
       <div class="sidebar">
         <h2>To-do/Not-to-do</h2>
-        <button type="button" id="createListBtn">New list</button>
+
+        <button type="button" id="createListBtn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-plus-icon lucide-plus"
+          >
+            <path d="M5 12h14" />
+            <path d="M12 5v14" />
+          </svg>
+          New list
+        </button>
         <nav id="todos">
-          <ul id="taskList"></ul>
+          <ul id="projectList"></ul>
         </nav>
       </div>
       <div class="content">
-        <button id="addTask">Add Task</button>
+        <div class="wrapper">
+          <div class="ProjectDetails"></div>
+          <div class="taskContainer"></div>
+        </div>
+
+        <div id="addTask">
+          <button id="addTaskBtn" type="button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-plus-icon lucide-plus"
+            >
+              <path d="M5 12h14" />
+              <path d="M12 5v14" />
+            </svg>
+          </button>
+          <form id="task-form">
+            <div class="title-desc-input">
+              <input
+                type="text"
+                id="task-title"
+                name="title"
+                placeholder="Finish project report"
+                required
+              />
+              <input
+                type="text"
+                id="task-desc"
+                name="desc"
+                placeholder="Description"
+              />
+            </div>
+
+            <div class="date-container">
+              <span class="calendar-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-calendar-days-icon lucide-calendar-days"
+                >
+                  <path d="M8 2v4" />
+                  <path d="M16 2v4" />
+                  <rect width="18" height="18" x="3" y="4" rx="2" />
+                  <path d="M3 10h18" />
+                  <path d="M8 14h.01" />
+                  <path d="M12 14h.01" />
+                  <path d="M16 14h.01" />
+                  <path d="M8 18h.01" />
+                  <path d="M12 18h.01" />
+                  <path d="M16 18h.01" />
+                </svg>
+              </span>
+              <input type="date" id="task-date" name="date" required />
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </body>
 </html>
+
+<!-- <div class="defaultImg">
+            <img src="./images/notepad_illus.png" alt="Notepad illustration" />
+            <p>Focus on your day</p>
+          </div> -->

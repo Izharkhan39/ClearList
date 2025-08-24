@@ -3,7 +3,6 @@ class Task {
     this.title = title;
     this.desc = desc;
     this.dueDate = dueDate;
-    this.note = note;
     this.checklist = checklist;
   }
 }

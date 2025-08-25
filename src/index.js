@@ -149,10 +149,9 @@ function onMenuEsc(e) {
 }
 
 function ProjectMenu(e) {
-  // prevent the list's click handler / document handlers from firing
   e.stopPropagation();
 
-  // If a menu is already open, close it first
+  // If a menu is already open close it first
   removeMenuOverlay();
 
   // Create overlay
@@ -174,12 +173,9 @@ function ProjectMenu(e) {
   document.body.appendChild(overlay);
   document.body.appendChild(menu);
 
-  // Position near the clicked 3-dots (use currentTarget, not target,
-  // since target might be the SVG path)
   const btn = e.currentTarget;
   const rect = btn.getBoundingClientRect();
 
-  // Wait a frame to ensure menu has layout (offsetWidth is correct)
   requestAnimationFrame(() => {
     const menuWidth = menu.offsetWidth || 160;
     const margin = 6;
@@ -218,7 +214,6 @@ function handleRename(projectLi) {
   const newTitle = prompt("Rename project:", oldTitle);
   if (!newTitle || !newTitle.trim()) return;
 
-  // Update UI text node (leave SVG intact)
   titleDiv.childNodes[0].textContent = newTitle.trim();
 
   // Update storage
@@ -234,13 +229,6 @@ function handleRename(projectLi) {
 
 function handleDelete(projectLi) {
   const title = projectLi.querySelector("div").childNodes[0].textContent.trim();
-
-  // // Optional: protect fixed projects
-  // const fixed = ["My Day", "Important", "Planned"];
-  // if (fixed.includes(title)) {
-  //   alert(`"${title}" is a fixed project and cannot be deleted.`);
-  //   return;
-  // }
 
   if (!confirm(`Delete project "${title}"?`)) return;
 

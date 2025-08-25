@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --config ./webpack-config/webpack.dev.js",
-    "build": "webpack --config ./webpack-config/webpack.prod.js"
+    "build": "webpack --config ./webpack-config/webpack.prod.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -18,10 +20,11 @@
   "bugs": {
     "url": "https://github.com/Izharkhan39/webpack-template/issues"
   },
-  "homepage": "https://github.com/Izharkhan39/webpack-template#readme",
+  "homepage": "https://Izharkhan39.github.io/ClearList/",
   "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^7.1.2",
+    "gh-pages": "^6.3.0",
     "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.3",
     "mini-css-extract-plugin": "^2.9.4",

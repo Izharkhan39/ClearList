@@ -20,7 +20,6 @@ function openEditSidebar(
   // Show the sidebar
   sidebar.classList.add("active");
 
-  // --- Define a single cleanup function ---
   const cleanup = () => {
     sidebar.classList.remove("active");
     // Clean up all listeners to prevent duplicates on next open
@@ -29,7 +28,6 @@ function openEditSidebar(
     deleteBtn.removeEventListener("click", deleteHandler);
   };
 
-  // --- Define Handlers ---
   const formSubmitHandler = (e) => {
     e.preventDefault();
 
@@ -51,7 +49,6 @@ function openEditSidebar(
   };
 
   const deleteHandler = () => {
-    // Add a confirmation dialog before deleting
     if (confirm(`Are you sure you want to delete the task "${task.title}"?`)) {
       // Remove the task from the array using splice
       projectListArray[projectIndex].projects.splice(taskIndex, 1);
@@ -64,7 +61,6 @@ function openEditSidebar(
     }
   };
 
-  // --- Attach Event Listeners ---
   form.addEventListener("submit", formSubmitHandler);
   closeBtn.addEventListener("click", closeSidebarHandler);
   deleteBtn.addEventListener("click", deleteHandler);
@@ -100,7 +96,7 @@ function createTaskCard(
 ) {
   const taskCard = document.createElement("div");
   taskCard.classList.add("taskCard");
-  taskCard.style.cursor = "pointer"; // Add cursor pointer to the whole card
+  taskCard.style.cursor = "pointer";
 
   const taskCheckBox = document.createElement("input");
   taskCheckBox.type = "checkbox";
@@ -174,7 +170,7 @@ function loadProjectContent(projectListArray) {
   const projectTitleDisplayElement = document.querySelector(".ProjectDetails");
 
   if (!currentSelectedProject) return;
-  if (!Array.isArray(projectListArray)) return; // defensive check
+  if (!Array.isArray(projectListArray)) return;
 
   const selectedProjectTitle = currentSelectedProject.textContent.trim();
   taskContainer.innerHTML = "";
@@ -222,7 +218,6 @@ function ProjectTitleDisplay(Project) {
 }
 
 function userInput(title, desc, dueDate) {
-  // Return plain object — index.js's addTask will accept this.
   return { title, desc, dueDate, checklist: false };
 }
 
@@ -231,10 +226,6 @@ function clearContent() {
   if (taskContainer) taskContainer.innerHTML = "";
 }
 
-/*
- * Instead of importing addTask from index.js (circular),
- * we export an initializer that accepts addTask as a callback.
- */
 function initAddTaskHandler(addTaskCallback) {
   const addTaskBtn = document.querySelector("#addTaskBtn");
   if (!addTaskBtn) return;
@@ -249,16 +240,13 @@ function initAddTaskHandler(addTaskCallback) {
     const desc = descEl ? descEl.value : "";
 
     if (!title || !dueDate) {
-      // you could show a small UI hint here
       return;
     }
 
-    // hide description (mirrors your previous behavior)
     if (descEl) descEl.classList.remove("active");
 
     const task = userInput(title, desc, dueDate);
 
-    // call the callback provided by index.js (which owns the project list)
     if (typeof addTaskCallback === "function") {
       addTaskCallback(task);
     } else {
@@ -269,12 +257,10 @@ function initAddTaskHandler(addTaskCallback) {
     if (dateEl) dateEl.value = "";
     if (descEl) descEl.value = "";
 
-    // hide desc and blur title
     if (descEl) descEl.classList.remove("active");
     if (titleEl) titleEl.blur();
   });
 
-  // attach focus listener ONCE
   const titleInput = document.querySelector("#task-title");
   if (titleInput) {
     titleInput.addEventListener("focus", () => {
